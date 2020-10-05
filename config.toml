@@ -1,7 +1,7 @@
 # Site settings
 baseURL = "https://zimengzhou-new.netlify.app/"
 languageCode = "en-us"
-title = "Forty"
+title = "Zimeng Zhou's Website"
 theme = "forty"
 
 # Enter your tracking code to enable Google Analytics
@@ -19,8 +19,8 @@ disqusShortname = ""
   # CSS class.
 
   # Provide your metadata here.
-  name = "Your name"
-  description = "Your description"
+  name = "Zimeng Zhou"
+  description = "Zimeng Zhou's Portfolio Website"
 
   # Link custom assets relative to /static
   custom_css = []
@@ -37,8 +37,8 @@ disqusShortname = ""
 
   # Navigation Section
   [params.navigation]
-    title = "Forty"
-    subtitle = "By HTML5 Up"
+    title = "Zimeng Zhou"
+    subtitle = "Portfolio Website"
     menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
@@ -212,7 +212,7 @@ disqusShortname = ""
 
     [[params.footer.social]]
       icon = "fa-linkedin"
-      url= "https://www.linkedin.com"
+      url= "https://www.linkedin.com/in/zimeng-zhou-510124138/"
       label = "LinkedIn"
 
     [[params.footer.quicklinks]]
