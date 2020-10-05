@@ -1,5 +1,5 @@
 # Site settings
-baseURL = "http://example.org/"
+baseURL = "https://zimengzhou-new.netlify.app"
 languageCode = "en-us"
 title = "Forty"
 theme = "forty"
@@ -81,8 +81,8 @@ disqusShortname = ""
   [params.banner]
     # To change the background image on the homepage banner, replace 'banner.jpg' in
     # the 'static/img' folder.
-    title = "Hi, my name is Forty"
-    subtitle = "A RESPONSIVE SITE TEMPLATE DESIGNED BY HTML5 UP\nAND RELEASED UNDER THE CREATIVE COMMONS."
+    title = "Hi, my name is Zimeng"
+    subtitle = "This is my portfolio website."
     buttonText = "Get Started"
 
 
