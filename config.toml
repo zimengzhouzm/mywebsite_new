@@ -38,7 +38,7 @@ disqusShortname = ""
   # Navigation Section
   [params.navigation]
     title = "Zimeng Zhou"
-    subtitle = "MFA2021 LBS"
+    subtitle = "Portfolio Website"
     menu = "Menu"
     # Optional logo as brand stored in img/
     # logo = "logo.png"
@@ -51,13 +51,13 @@ disqusShortname = ""
       name = "Blogs"
       url = "blogs"
 
-  #  [[params.navigation.links]]
-  #    name = "Generic Blog"
-  #    url = "blogs/ipsum"
+ #   [[params.navigation.links]]
+ #     name = "Generic Blog"
+ #    url = "blogs/ipsum"
 
-  # [[params.navigation.links]]
-  #  name = "Elements"
-  # url = "elements.html"
+ #   [[params.navigation.links]]
+ #     name = "Elements"
+ #     url = "elements.html"
 
     # Add custom links here by uncommenting code below. To remove links just delete
     # the [[params.navigation.links]] map associated with that link. Copy and paste
@@ -98,10 +98,10 @@ disqusShortname = ""
       url = "blogs/aliquam"
 
     [[params.tiles.showcase]]
-      title = "Who will win the 2020 US president election?"
-      subtitle = "By analysing past data"
-      image = "pic02.jpg"
-      url = "blogs/tempus"
+      title = "Who will win the 2020 US preidential election?"
+      subtitle = "My analysis based on past data"
+      image = "trump.jpg"
+      url = "blogs/Trump"
 
     [[params.tiles.showcase]]
       title = "Magna"

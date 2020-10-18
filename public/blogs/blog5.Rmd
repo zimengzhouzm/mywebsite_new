@@ -7,9 +7,10 @@ description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis mag
 draft: false
 image: pic08.jpg
 keywords: ""
-slug: tempus
-title: Tempus
+slug: Trump
+title: Estimating Net Approval (approve-disapprove) for Donald Trump
 ---
+
 
 
 ```{r load-libraries, include=FALSE}
@@ -25,16 +26,16 @@ library(readxl)
 library(vroom)
 ```
 
+
+
+
 # Trump's Approval Margins
 
 As we saw in class, fivethirtyeight.com has detailed data on [all polls that track the president's approval ](https://projects.fivethirtyeight.com/trump-approval-ratings)
 
 ```{r, cache=TRUE,warnings= FALSE, message=FALSE}
 # Import approval polls data
-approval_polllist <- read_csv(here::here('data', 'approval_polllist.csv'))
-
-# or directly off fivethirtyeight website
-# approval_polllist <- read_csv('https://projects.fivethirtyeight.com/trump-approval-data/approval_polllist.csv') 
+approval_polllist <- read_csv(here::here('static','data', 'approval_polllist.csv'))
 
 glimpse(approval_polllist)
 
@@ -127,3 +128,5 @@ CI_week34
 ```
 
 In the Week 34(17-23 August 2020), both the lower bound and higher bound of 95% Confidence Interval of the net approval of Trump declined from Week 15 (6-12 April 2020). This suggested that the approval rate of Trump declined over the 4 months. Also, it is noticeable that the width of the Confidence Interval increased over the period, which suggested that the estimated net approval rates was more difficult to estimate. This is consistent with the increase in standard deviation, which also demonstrated that the net approval rate in the sample is more divided. So generally speaking, as the election date coming closer, the approval rates from different pollsters became more different,and it is harder to estimate the result.
+
+

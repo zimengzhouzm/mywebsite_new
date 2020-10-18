@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Forty</title>
+    <title>Zimeng Zhou&#39;s Website</title>
     <link>/</link>
-    <description>Recent content on Forty</description>
+    <description>Recent content on Zimeng Zhou&#39;s Website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 31 Oct 2017 22:42:51 -0500</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
@@ -17,12 +17,23 @@
     </item>
     
     <item>
+      <title>Estimating Net Approval (approve-disapprove) for Donald Trump</title>
+      <link>/blogs/trump/</link>
+      <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
+      
+      <guid>/blogs/trump/</guid>
+      <description>Trump’s Approval MarginsAs we saw in class, fivethirtyeight.com has detailed data on all polls that track the president’s approval
+# Import approval polls dataapproval_polllist &amp;lt;- read_csv(here::here(&amp;#39;static&amp;#39;,&amp;#39;data&amp;#39;, &amp;#39;approval_polllist.csv&amp;#39;))glimpse(approval_polllist)## Rows: 15,619## Columns: 22## $ president &amp;lt;chr&amp;gt; &amp;quot;Donald Trump&amp;quot;, &amp;quot;Donald Trump&amp;quot;, &amp;quot;Donald Trump&amp;quot;,...## $ subgroup &amp;lt;chr&amp;gt; &amp;quot;All polls&amp;quot;, &amp;quot;All polls&amp;quot;, &amp;quot;All polls&amp;quot;, &amp;quot;All pol...## $ modeldate &amp;lt;chr&amp;gt; &amp;quot;9/27/2020&amp;quot;, &amp;quot;9/27/2020&amp;quot;, &amp;quot;9/27/2020&amp;quot;, &amp;quot;9/27/20...## $ startdate &amp;lt;chr&amp;gt; &amp;quot;1/20/2017&amp;quot;, &amp;quot;1/20/2017&amp;quot;, &amp;quot;1/20/2017&amp;quot;, &amp;quot;1/21/20.</description>
+    </item>
+    
+    <item>
       <title>Tempus</title>
       <link>/blogs/tempus/</link>
       <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
       
       <guid>/blogs/tempus/</guid>
-      <description></description>
+      <description>library(tidyverse) # Load ggplot2, dplyr, and all the other tidyverse packageslibrary(mosaic)library(ggthemes)library(lubridate)library(here)library(skimr)library(janitor)library(httr)library(readxl)library(vroom)Trump&amp;rsquo;s Approval Margins As we saw in class, fivethirtyeight.com has detailed data on all polls that track the president&amp;rsquo;s approval 
+# Import approval polls dataapproval_polllist &amp;lt;- read_csv(here::here(&#39;data&#39;, &#39;approval_polllist.csv&#39;))# or directly off fivethirtyeight website# approval_polllist &amp;lt;- read_csv(&#39;https://projects.fivethirtyeight.com/trump-approval-data/approval_polllist.csv&#39;) glimpse(approval_polllist)approval_polllist&amp;lt;-approval_polllist %&amp;gt;% mutate(end_date1 = mdy(enddate))# Use `lubridate` to fix dates, as they are given as characters.</description>
     </item>
     
     <item>
@@ -40,7 +51,7 @@
       <pubDate>Tue, 31 Oct 2017 21:28:43 -0500</pubDate>
       
       <guid>/blogs/ipsum/</guid>
-      <description>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.</description>
+      <description></description>
     </item>
     
     <item>

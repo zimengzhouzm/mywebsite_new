@@ -1,6 +1,6 @@
 ---
-categories:
-- ""
+  categories:
+  - ""
 - ""
 date: "2017-10-31T22:26:13-05:00"
 description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.
@@ -10,9 +10,9 @@ keywords: ""
 slug: tempus
 title: Tempus
 ---
-
-
-```{r load-libraries, include=FALSE}
+  
+  
+  ```{r load-libraries, include=FALSE}
 library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
 library(mosaic)
 library(ggthemes)
@@ -103,27 +103,28 @@ ggplot(CI_approval,aes(x=enddate_week, y = mean_net_approve,color=as.factor(year
 ## Compare Confidence Intervals
 
 Compare the confidence intervals for `week 15` (6-12 April 2020) and `week 34` (17-23 August 2020). Can you explain what's going on? One paragraph would be enough.
-```{r Compare Confidence Intervals, warnings= FALSE, message=FALSE}
-CI_week15<-approval_polllist %>%
-  filter(year=="2020") %>%
-  filter(enddate_week=="15") %>%
-  summarise(mean_net_approve = mean(net_approve),
-  sd_net_approve = sd(net_approve),
-  count=n(),
-  se_net_approve = parameters::standard_error(net_approve),
-  net_approve_low = mean_net_approve - se_net_approve*qt(0.95, count-1),
-  net_approve_high = mean_net_approve + se_net_approve*qt(0.95, count-1))
-CI_week34<-approval_polllist %>%
-  filter(year=="2020") %>%
-  filter(enddate_week=="34") %>%
-  summarise(mean_net_approve = mean(net_approve),
-  sd_net_approve = sd(net_approve),
-  count=n(),
-  se_net_approve = parameters::standard_error(net_approve),
-  net_approve_low = mean_net_approve - se_net_approve*qt(0.95, count-1),
-  net_approve_high = mean_net_approve + se_net_approve*qt(0.95, count-1))
-CI_week15
-CI_week34
-```
-
-In the Week 34(17-23 August 2020), both the lower bound and higher bound of 95% Confidence Interval of the net approval of Trump declined from Week 15 (6-12 April 2020). This suggested that the approval rate of Trump declined over the 4 months. Also, it is noticeable that the width of the Confidence Interval increased over the period, which suggested that the estimated net approval rates was more difficult to estimate. This is consistent with the increase in standard deviation, which also demonstrated that the net approval rate in the sample is more divided. So generally speaking, as the election date coming closer, the approval rates from different pollsters became more different,and it is harder to estimate the result.
+                                                              ```{r Compare Confidence Intervals, warnings= FALSE, message=FALSE}
+                                                              CI_week15<-approval_polllist %>%
+                                                                filter(year=="2020") %>%
+                                                                filter(enddate_week=="15") %>%
+                                                                summarise(mean_net_approve = mean(net_approve),
+                                                                          sd_net_approve = sd(net_approve),
+                                                                          count=n(),
+                                                                          se_net_approve = parameters::standard_error(net_approve),
+                                                                          net_approve_low = mean_net_approve - se_net_approve*qt(0.95, count-1),
+                                                                          net_approve_high = mean_net_approve + se_net_approve*qt(0.95, count-1))
+                                                              CI_week34<-approval_polllist %>%
+                                                                filter(year=="2020") %>%
+                                                                filter(enddate_week=="34") %>%
+                                                                summarise(mean_net_approve = mean(net_approve),
+                                                                          sd_net_approve = sd(net_approve),
+                                                                          count=n(),
+                                                                          se_net_approve = parameters::standard_error(net_approve),
+                                                                          net_approve_low = mean_net_approve - se_net_approve*qt(0.95, count-1),
+                                                                          net_approve_high = mean_net_approve + se_net_approve*qt(0.95, count-1))
+                                                              CI_week15
+                                                              CI_week34
+                                                              ```
+                                                              
+                                                              In the Week 34(17-23 August 2020), both the lower bound and higher bound of 95% Confidence Interval of the net approval of Trump declined from Week 15 (6-12 April 2020). This suggested that the approval rate of Trump declined over the 4 months. Also, it is noticeable that the width of the Confidence Interval increased over the period, which suggested that the estimated net approval rates was more difficult to estimate. This is consistent with the increase in standard deviation, which also demonstrated that the net approval rate in the sample is more divided. So generally speaking, as the election date coming closer, the approval rates from different pollsters became more different,and it is harder to estimate the result.
+                                                              
