@@ -212,7 +212,7 @@ disqusShortname = ""
 
     [[params.footer.social]]
       icon = "fa-linkedin"
-      url= "https://www.linkedin.com/in/zimeng-zhou-510124138/"
+      url= "https://www.linkedin.com/in/zimeng-michelle-zhou-510124138/"
       label = "LinkedIn"
 
     [[params.footer.quicklinks]]
