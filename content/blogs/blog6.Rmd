@@ -1,0 +1,220 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:26:09-05:00"
+description: Lorem Etiam Nullam
+draft: false
+image: pic09.jpg
+keywords: ""
+slug: GDP
+title: Compare the GDP Components in the US, Germany and India
+---
+
+
+
+
+```{r load-libraries, include=FALSE}
+library(tidyverse)  # Load ggplot2, dplyr, and all the other tidyverse packages
+library(mosaic)
+library(ggthemes)
+library(lubridate)
+library(here)
+library(skimr)
+library(janitor)
+library(httr)
+library(readxl)
+library(vroom)
+library(sjstats)
+```
+
+
+
+
+# GDP components over time and among countries
+In this project, I will use the data from the [United Nations' National Accounts Main Aggregates Database](https://unstats.un.org/unsd/snaama/Downloads), which contains estimates of total GDP and its components for all countries from 1970 to today. I will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country's GDP. The file I will work with is [GDP and its breakdown at constant 2010 prices in US Dollars](http://unstats.un.org/unsd/amaapi/api/file/6).
+
+```{r, cache=TRUE,warnings= FALSE, message=FALSE}
+# Import the data
+UN_GDP_data  <-  read_excel(here::here("data", "Download-GDPconstant-USD-countries.xls"), # Excel filename
+                sheet="Download-GDPconstant-USD-countr", # Sheet name
+                skip=2) # Number of rows to skip
+
+```
+
+The first thing I is to tidy the data, as it is in wide format and you must make it into long, tidy format, and express all figures in billions (divide values by `1e9`, or $10^9$), and rename the indicators into something shorter.
+ 
+
+```{r reshape_GDP_data, warning=FALSE,message=FALSE}
+
+tidy_GDP_data  <- UN_GDP_data %>% 
+# make the data into longer version
+    pivot_longer(cols = -c(1:3),
+               names_to = "Year", 
+               values_to = "USD"
+               )%>% 
+# express figures into billions
+ mutate(USD_bn = USD/1e9) %>% 
+  
+# rename the indicators into shorter names
+ mutate(ShortName = case_when(
+    IndicatorName == "General government final consumption expenditure" ~ "Government expenditure",
+    IndicatorName =="Exports of goods and services" ~ "Exports",
+    IndicatorName =="Imports of goods and services" ~ "Imports",
+    IndicatorName =="Household consumption expenditure (including Non-profit institutions serving households)" ~ "Household expenditure",
+    IndicatorName =="Gross Domestic Product (GDP)" ~ "GDP",
+    
+    TRUE ~ as.character(IndicatorName)
+  ))
+
+
+glimpse(tidy_GDP_data)
+
+
+# Let us compare GDP components for these 3 countries
+# select the countries
+country_list <- c("Germany", "India","United States")
+
+# select only the required components of GDP
+indicator_list <- c("Gross capital formation", "Exports", "Government expenditure", "Household expenditure", "Imports")
+
+# select data only for selected countries & indicators
+graph1_data <- tidy_GDP_data %>% 
+  filter(Country  %in% country_list) %>% 
+  filter(ShortName %in% indicator_list)
+
+```
+
+
+## GDP components over time
+```{r gdp1_rep, fig.width='100%'}
+
+graph1_data %>% 
+ggplot(aes(x=Year, y= USD_bn,group=ShortName))+
+  
+#plot the lines by indicator names
+  geom_line(aes(color=ShortName))+
+  facet_wrap(~Country)+
+  scale_x_discrete(breaks = seq(1970,2010,by=10))+
+  theme_bw()+
+  labs(title = "GDP components over time",
+       subtitle="In constant 2010 USD",
+       x= '', 
+       y = "Bilion US$",
+       caption = "Source: United Nations,https://unstats.un.org/unsd/snaama/Downloads") +
+  
+  #add legend to the graph
+  guides(color=guide_legend(title="Components of GDP"),size=5)+
+
+    theme(axis.text.x = element_text(size = 8, margin=margin(0,15,0,0)),
+        axis.text.y = element_text(size = 8, margin = margin(15,0,0,0)),
+        plot.title = element_text(size = 10, face = "bold", margin = margin(0,0,5,0)),
+        plot.subtitle = element_text(size = 8, margin = margin(0,0,20,0)),
+        axis.title.y = element_text(size=8, face="bold"),
+        plot.caption =  element_text(size = 6),
+        legend.text = element_text(size = 8))+
+  NULL
+```
+
+
+Secondly, recall that GDP is the sum of Household Expenditure (Consumption *C*), Gross Capital Formation (business investment *I*), Government Expenditure (G) and Net Exports (exports - imports). Even though there is an indicator `Gross Domestic Product (GDP)` in dataframe, I would like  to calculate it given its components discussed above.
+
+
+
+```{r gdp2_rep, fig.width='100%'}
+library(scales)
+# select the required components of GDP, and GDP
+indicator_list2 <- c("Gross capital formation", "Exports", "Government expenditure", "Household expenditure", "Imports","GDP")
+
+# select data only for selected countries & indicators
+graph2_data <- tidy_GDP_data %>% 
+  filter(Country  %in% country_list) %>% 
+  filter(ShortName %in% indicator_list2)
+
+# delete the columns of orginal names and USD amount
+graph2_data<- subset(graph2_data, select = -c(USD,IndicatorName)) %>% 
+  pivot_wider(names_from = ShortName, values_from = USD_bn) 
+
+#replace the space in column names 
+colnames(graph2_data) <- gsub(" |/", '_', colnames(graph2_data)) 
+
+#Calculate net exports and the breakdown of GDP
+graph2_data1<-graph2_data %>% 
+  mutate(Net= Exports-Imports,
+         GovExp_percent=Government_expenditure/GDP,
+         Net_percent=Net/GDP,
+         GrossCap_percent=Gross_capital_formation/GDP,
+         HouseExp_percent=Household_expenditure/GDP,
+         GDP_Calculated=Net+Gross_capital_formation+Government_expenditure+Household_expenditure,
+         GDP_difference= GDP_Calculated/GDP-1)
+
+# Display the % difference between what calculated as GDP and the GDP figure included in the dataframe
+gdp_diff<-graph2_data1 %>% 
+ pivot_longer(cols = -c(1:3),
+              names_to = "ShortName", 
+              values_to = "GDP_Difference"
+               )%>% 
+  filter(ShortName =="GDP_difference")
+
+gdp_diff<-gdp_diff %>% 
+  mutate(GDP_difference_percent=scales::percent(GDP_Difference))
+print(subset(gdp_diff,select=-c(GDP_Difference)))
+
+# select only the required data for comparison
+indicator_list3 <- c("GovExp_percent", "Net_percent","GrossCap_percent","HouseExp_percent")
+
+#make the dataframe into longer version
+graph2_data2<-graph2_data1 %>% 
+ pivot_longer(cols = -c(1:3),
+               names_to = "ShortName", 
+               values_to = "USD_bn"
+               )%>% 
+  filter(ShortName %in% indicator_list3)
+
+#plot the result
+graph2_data2 %>% 
+ggplot(aes(x=Year, y= USD_bn,group=ShortName))+
+  
+#plot the lines by indicator names
+  geom_line(aes(color=ShortName))+
+  facet_wrap(~Country)+
+  scale_x_discrete(breaks = seq(1970,2010,by=10))+
+  scale_y_continuous(breaks = c(0,0.2,0.4,0.6),labels=c("0.0%","20.0%","40.0%","60.0%"))+
+  theme_bw()+
+  labs(title = "GDP and its breakdown at constant 2010 prices in US dollars",
+       x= '', 
+       y = "Bilion US$",
+       caption = "Source: United Nations,https://unstats.un.org/unsd/snaama/Downloads") +
+  
+#change the name of legends 
+scale_colour_discrete(labels = c("Goverment expenditure", "Gross capital formation","Household expenditure","Net exports"))+
+guides(color=guide_legend(title=""))+
+  
+theme(axis.text.x = element_text(size = 8, margin=margin(0,15,0,0)),
+      axis.text.y = element_text(size = 8, margin = margin(15,0,0,0)),
+      plot.title = element_text(size = 10, face = "bold", margin = margin(0,0,5,0)),
+      plot.subtitle = element_text(size = 8, margin = margin(0,0,20,0)),
+      axis.title.y = element_text(size=8, face="bold"),
+      plot.caption =  element_text(size = 6),
+      legend.text = element_text(size = 8))+
+  NULL
+```
+
+> What is the % difference between what you calculated as GDP and the GDP figure included in the dataframe?
+
+As shown in the above table, the percentage difference is quite small and mostly less than 5%.
+
+
+> What is this last chart telling you? Can you explain in a couple of paragraphs the different dynamic among these three countries? 
+ 
+The last chart compares the GDP breakdown structure of its four components. In all of the four countries, household expenditure contributes the most part with around 60-70% of the GDP composed of the household expenditure, while the net export made up of the least past in the total GDP number, contributing to less than 10% of the total GDP.
+
+Looking closely into each country, there are different dynamics as well. For Germany, the contribution proportion of household expenditure is the lowest among the three countries, and it demonstrated a declining trend over the recent three decades. It is also the only country among the three that had constant trend of declining proportion of gross capital formation in these three countries, and the percentage number declined by about 10% in the past 50 years. On the other hand, Germany is also the only country that had a increase in the proportion of the net exports. While the other two countries both have negative contribution of net export, around 8% of the current GDP in German in made up of the net export. This is mainly because of its strong manufacturing industry that supported the export data.
+
+In India, the household expenditure started as more than 70% of the GDP in 1970, and the number has continuously decreased to about 55% in 2016. On the other hand, India's gross capital formation greatly increased over the years to account for 35% of the total GDP in 2016, which is the highest percentage in the three countries. This shows that India is quicly accumulating capital over the years. India also had the lowest government expenditure, constantly contributing to around 10% of the total GDP.
+
+In the United States, the most noticeable difference is that the household expenditure is continuously taking up more part of the total GDP, and the percentage is the highest in the 2016 among the three countries. Another difference is the government expenditure, which largely decreased from 25% to 15%. 
+
+
+
+
