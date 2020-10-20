@@ -43,7 +43,7 @@ UN_GDP_data  <-  read_excel(here::here("data", "Download-GDPconstant-USD-countri
 
 ```
 
-The first thing I is to tidy the data, as it is in wide format and you must make it into long, tidy format, and express all figures in billions (divide values by `1e9`, or $10^9$), and rename the indicators into something shorter.
+The first thing is to tidy the data, as it is in wide format and I make it into long, tidy format, and express all figures in billions (divide values by `1e9`, or $10^9$), and rename the indicators into something shorter.
  
 
 ```{r reshape_GDP_data, warning=FALSE,message=FALSE}
@@ -117,7 +117,9 @@ ggplot(aes(x=Year, y= USD_bn,group=ShortName))+
 ```
 
 
-Secondly, recall that GDP is the sum of Household Expenditure (Consumption *C*), Gross Capital Formation (business investment *I*), Government Expenditure (G) and Net Exports (exports - imports). Even though there is an indicator `Gross Domestic Product (GDP)` in dataframe, I would like  to calculate it given its components discussed above.
+## GDP calculation from components
+
+GDP is the sum of Household Expenditure (Consumption *C*), Gross Capital Formation (business investment *I*), Government Expenditure (G) and Net Exports (exports - imports). Even though there is an indicator `Gross Domestic Product (GDP)` in dataframe, I would like  to calculate it given its components discussed above.
 
 
 

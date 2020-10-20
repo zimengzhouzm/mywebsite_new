@@ -92,7 +92,7 @@
 UN_GDP_data  &lt;-  read_excel(here::here(&quot;data&quot;, &quot;Download-GDPconstant-USD-countries.xls&quot;), # Excel filename
                 sheet=&quot;Download-GDPconstant-USD-countr&quot;, # Sheet name
                 skip=2) # Number of rows to skip</code></pre>
-<p>The first thing I is to tidy the data, as it is in wide format and you must make it into long, tidy format, and express all figures in billions (divide values by <code>1e9</code>, or <span class="math inline">\(10^9\)</span>), and rename the indicators into something shorter.</p>
+<p>The first thing is to tidy the data, as it is in wide format and I make it into long, tidy format, and express all figures in billions (divide values by <code>1e9</code>, or <span class="math inline">\(10^9\)</span>), and rename the indicators into something shorter.</p>
 <pre class="r"><code>tidy_GDP_data  &lt;- UN_GDP_data %&gt;% 
 # make the data into longer version
     pivot_longer(cols = -c(1:3),
@@ -163,7 +163,10 @@ ggplot(aes(x=Year, y= USD_bn,group=ShortName))+
         legend.text = element_text(size = 8))+
   NULL</code></pre>
 <p><img src="/blogs/blog6_files/figure-html/gdp1_rep-1.png" width="672" /></p>
-<p>Secondly, recall that GDP is the sum of Household Expenditure (Consumption <em>C</em>), Gross Capital Formation (business investment <em>I</em>), Government Expenditure (G) and Net Exports (exports - imports). Even though there is an indicator <code>Gross Domestic Product (GDP)</code> in dataframe, I would like to calculate it given its components discussed above.</p>
+</div>
+<div id="gdp-calculation-from-components" class="section level2">
+<h2>GDP calculation from components</h2>
+<p>GDP is the sum of Household Expenditure (Consumption <em>C</em>), Gross Capital Formation (business investment <em>I</em>), Government Expenditure (G) and Net Exports (exports - imports). Even though there is an indicator <code>Gross Domestic Product (GDP)</code> in dataframe, I would like to calculate it given its components discussed above.</p>
 <pre class="r"><code># select the required components of GDP, and GDP
 indicator_list2 &lt;- c(&quot;Gross capital formation&quot;, &quot;Exports&quot;, &quot;Government expenditure&quot;, &quot;Household expenditure&quot;, &quot;Imports&quot;,&quot;GDP&quot;)
 
