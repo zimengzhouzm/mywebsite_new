@@ -2,141 +2,133 @@
 categories:
 - ""
 - ""
-date: "2017-10-31T22:26:13-05:00"
-description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.
+date: "2017-10-31T22:26:09-05:00"
+description: Lorem Etiam Nullam
 draft: false
-image: pic08.jpg
+image: pic09.jpg
 keywords: ""
-slug: Trump
-title: Estimating Net Approval (approve-disapprove) for Donald Trump
+slug: Gun
+title: Relationship between the annual rates of firearm homicide and suicide among white men
 ---
 
 
 
-<div id="trumps-approval-margins" class="section level1">
-<h1>Trump’s Approval Margins</h1>
-<p>In this project, I will use the data from fivethirtyeight.com <a href="https://projects.fivethirtyeight.com/trump-approval-ratings">all polls that track the president’s approval</a> to analyse Trumps’s approval margin.</p>
-<pre class="r"><code># Import approval polls data
-approval_polllist &lt;- read_csv(here::here(&#39;static&#39;,&#39;data&#39;, &#39;approval_polllist.csv&#39;))
-
-glimpse(approval_polllist)</code></pre>
-<pre><code>## Rows: 15,619
-## Columns: 22
-## $ president           &lt;chr&gt; &quot;Donald Trump&quot;, &quot;Donald Trump&quot;, &quot;Donald Trump&quot;,...
-## $ subgroup            &lt;chr&gt; &quot;All polls&quot;, &quot;All polls&quot;, &quot;All polls&quot;, &quot;All pol...
-## $ modeldate           &lt;chr&gt; &quot;9/27/2020&quot;, &quot;9/27/2020&quot;, &quot;9/27/2020&quot;, &quot;9/27/20...
-## $ startdate           &lt;chr&gt; &quot;1/20/2017&quot;, &quot;1/20/2017&quot;, &quot;1/20/2017&quot;, &quot;1/21/20...
-## $ enddate             &lt;chr&gt; &quot;1/22/2017&quot;, &quot;1/22/2017&quot;, &quot;1/24/2017&quot;, &quot;1/23/20...
-## $ pollster            &lt;chr&gt; &quot;Gallup&quot;, &quot;Morning Consult&quot;, &quot;Ipsos&quot;, &quot;Gallup&quot;,...
-## $ grade               &lt;chr&gt; &quot;B&quot;, &quot;B/C&quot;, &quot;B-&quot;, &quot;B&quot;, &quot;B-&quot;, &quot;C+&quot;, &quot;B+&quot;, &quot;B&quot;, &quot;...
-## $ samplesize          &lt;dbl&gt; 1500, 1992, 1632, 1500, 1651, 1500, 1190, 1500,...
-## $ population          &lt;chr&gt; &quot;a&quot;, &quot;rv&quot;, &quot;a&quot;, &quot;a&quot;, &quot;a&quot;, &quot;lv&quot;, &quot;rv&quot;, &quot;a&quot;, &quot;lv&quot;...
-## $ weight              &lt;dbl&gt; 0.2623230, 0.6800286, 0.1534812, 0.2428446, 0.1...
-## $ influence           &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,...
-## $ approve             &lt;dbl&gt; 45.0, 46.0, 42.1, 45.0, 42.3, 57.0, 36.0, 46.0,...
-## $ disapprove          &lt;dbl&gt; 45.0, 37.0, 45.2, 46.0, 45.8, 43.0, 44.0, 45.0,...
-## $ adjusted_approve    &lt;dbl&gt; 45.74501, 45.33176, 43.20435, 45.74501, 43.4043...
-## $ adjusted_disapprove &lt;dbl&gt; 43.60928, 38.28908, 43.87252, 44.60928, 44.4725...
-## $ multiversions       &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,...
-## $ tracking            &lt;lgl&gt; TRUE, NA, TRUE, TRUE, TRUE, TRUE, NA, TRUE, TRU...
-## $ url                 &lt;chr&gt; &quot;http://www.gallup.com/poll/201617/gallup-daily...
-## $ poll_id             &lt;dbl&gt; 49253, 49249, 49426, 49262, 49425, 49266, 49260...
-## $ question_id         &lt;dbl&gt; 77265, 77261, 77599, 77274, 77598, 77278, 77272...
-## $ createddate         &lt;chr&gt; &quot;1/23/2017&quot;, &quot;1/23/2017&quot;, &quot;3/1/2017&quot;, &quot;1/24/201...
-## $ timestamp           &lt;chr&gt; &quot;00:45:20 27 Sep 2020&quot;, &quot;00:45:20 27 Sep 2020&quot;,...</code></pre>
-<pre class="r"><code># Use `lubridate` to fix dates, as they are given as characters.
-approval_polllist&lt;-approval_polllist %&gt;% 
-  mutate(end_date1 = mdy(enddate))</code></pre>
-<div id="create-a-plot" class="section level2">
-<h2>Create a plot</h2>
-<p>I will first calculate the average net approval rate (approve- disapprove), and tidy the data by using the day when the poll ended as the end date. Then I will calculate the 95% confidence interval of average net approval rate (approve- disapprove).</p>
-<pre class="r"><code>#calculate net approval and change dates.
-approval_polllist&lt;-approval_polllist %&gt;% 
-  mutate(net_approve=approve-disapprove,#used adjusted data
-         year=year(end_date1),
-         enddate_week=week(end_date1))
-
-#group by year and calculate the 95% confidence interval
-CI_approval&lt;-approval_polllist %&gt;%
-  group_by(year,enddate_week) %&gt;%
-  
-#filter na data and week 3 is when Trump got into office, so it is also filtered
-  filter (!is.na(net_approve)) %&gt;% 
-  filter (enddate_week!=&quot;3&quot;) %&gt;% 
-  
-#calculate 95% CI
-  summarise(mean_net_approve = mean(net_approve, na.rm = TRUE),
-  sd_net_approve = sd(net_approve, na.rm = TRUE),
-  count=n(),
-  se_net_approve = parameters::standard_error(net_approve),
-  net_approve_low = mean_net_approve - se_net_approve*qt(0.95, count-1),
-  net_approve_high = mean_net_approve + se_net_approve*qt(0.95, count-1))</code></pre>
-<p>I will then do the plotting</p>
-<pre class="r"><code>#specify the colors
-cbp1 &lt;- c(&quot;2017&quot;=&quot;#FF6699&quot;,&quot;2018&quot; =&quot;#99CC66&quot;,&quot;2019&quot;= &quot;#66CCCC&quot;,&quot;2020&quot;= &quot;violet&quot;)
-
-#plotting
-ggplot(CI_approval,aes(x=enddate_week, y = mean_net_approve,color=as.factor(year)))+
-  geom_point(size=1)+
-  geom_line()+
-  geom_hline(aes(yintercept=0), color=&quot;orange&quot;)+
-  labs (
-    title = &quot;Estimating Net Approval (approve-disapprove) for Donald Trump&quot;,
-    subtitle=&quot;weekly average of all polls&quot;,
-    x= &#39;Week of the year&#39;, y = &quot;Average Net Approval(%)&quot;)+
-  
-#change the scale of x and y axis
-  scale_x_continuous(breaks = c(13,26,39,52))+
-  scale_y_continuous(breaks = c(-20,-17.5,-15,-12.5,-10,-7.5,-5,-2.5,0,2.5,5,7.5))+
-  facet_wrap(~year)+
-  
-#color the plot and add the ribbon
-  scale_fill_manual(values = cbp1,guide = FALSE)+
-  scale_color_manual(values = cbp1,guide = FALSE)+
-  geom_ribbon(aes(ymax = net_approve_high, ymin = net_approve_low,fill=factor(year)),alpha=0.3)+
-  coord_fixed(ratio = 0.9)+
-  theme(axis.text.x = element_text(size = 7, margin = margin(0,15,0,0)))+
-  theme(axis.text.y = element_text(size = 7, margin = margin(15,0,0,0)))+
-  NULL</code></pre>
-<p><img src="/blogs/blog7_files/figure-html/plot-1.png" width="672" /></p>
-</div>
-<div id="compare-confidence-intervals" class="section level2">
-<h2>Compare Confidence Intervals</h2>
-<p>Compare the confidence intervals for <code>week 15</code> (6-12 April 2020) and <code>week 34</code> (17-23 August 2020).</p>
-<pre class="r"><code>CI_week15&lt;-approval_polllist %&gt;%
-  filter(year==&quot;2020&quot;) %&gt;%
-  filter(enddate_week==&quot;15&quot;) %&gt;%
-  summarise(mean_net_approve = mean(net_approve),
-  sd_net_approve = sd(net_approve),
-  count=n(),
-  se_net_approve = parameters::standard_error(net_approve),
-  net_approve_low = mean_net_approve - se_net_approve*qt(0.95, count-1),
-  net_approve_high = mean_net_approve + se_net_approve*qt(0.95, count-1))
-CI_week34&lt;-approval_polllist %&gt;%
-  filter(year==&quot;2020&quot;) %&gt;%
-  filter(enddate_week==&quot;34&quot;) %&gt;%
-  summarise(mean_net_approve = mean(net_approve),
-  sd_net_approve = sd(net_approve),
-  count=n(),
-  se_net_approve = parameters::standard_error(net_approve),
-  net_approve_low = mean_net_approve - se_net_approve*qt(0.95, count-1),
-  net_approve_high = mean_net_approve + se_net_approve*qt(0.95, count-1))
-
-CI_week15</code></pre>
-<pre><code>## # A tibble: 1 x 6
-##   mean_net_approve sd_net_approve count se_net_approve net_approve_low
-##              &lt;dbl&gt;          &lt;dbl&gt; &lt;int&gt;          &lt;dbl&gt;           &lt;dbl&gt;
-## 1            -7.62           3.27    94          0.338           -8.18
-## # ... with 1 more variable: net_approve_high &lt;dbl&gt;</code></pre>
-<pre class="r"><code>CI_week34</code></pre>
-<pre><code>## # A tibble: 1 x 6
-##   mean_net_approve sd_net_approve count se_net_approve net_approve_low
-##              &lt;dbl&gt;          &lt;dbl&gt; &lt;int&gt;          &lt;dbl&gt;           &lt;dbl&gt;
-## 1            -11.5           7.14    84          0.779           -12.8
-## # ... with 1 more variable: net_approve_high &lt;dbl&gt;</code></pre>
-<div id="explanation" class="section level3">
-<h3>Explanation</h3>
-<p>In the Week 34(17-23 August 2020), both the lower bound and higher bound of 95% Confidence Interval of the net approval of Trump declined from Week 15 (6-12 April 2020). This suggested that the approval rate of Trump declined over the 4 months. Also, it is noticeable that the width of the Confidence Interval increased over the period, which suggested that the estimated net approval rates was more difficult to estimate. This is consistent with the increase in standard deviation, which also demonstrated that the net approval rate in the sample is more divided. So generally speaking, as the election date coming closer, the approval rates from different pollsters became more different, and it is harder to estimate the result.</p>
-</div>
-</div>
+<div id="firearm-homicide-and-suicide-were-strongly-associated-for-white-men" class="section level1">
+<h1>Firearm homicide and suicide were strongly associated for white men</h1>
+<pre class="r"><code>#upload data
+cdc_males &lt;- read_csv(here::here(&quot;data&quot;, &quot;CDC_Males.csv&quot;))
+glimpse(cdc_males)</code></pre>
+<pre><code>## Rows: 104
+## Columns: 28
+## $ ST                      &lt;chr&gt; &quot;AK&quot;, &quot;AK&quot;, &quot;AL&quot;, &quot;AL&quot;, &quot;AR&quot;, &quot;AR&quot;, &quot;AZ&quot;, &quot;...
+## $ State                   &lt;chr&gt; &quot;Alaska&quot;, &quot;Alaska&quot;, &quot;Alabama&quot;, &quot;Alabama&quot;, &quot;...
+## $ Population.Black        &lt;dbl&gt; 153664, 153664, 5376635, 5376635, 1991165, ...
+## $ Population.White        &lt;dbl&gt; 2274605, 2274605, 14267619, 14267619, 97470...
+## $ Deaths.homicide.Black   &lt;dbl&gt; 23, NA, 183, 1812, 667, 90, 300, 40, 3712, ...
+## $ Deaths.homicide.White   &lt;dbl&gt; 78, 10, 124, 620, 416, 110, 586, 145, 1399,...
+## $ crude.homicide.Black    &lt;dbl&gt; 14.97, NA, 3.40, 33.70, 33.50, 4.52, 22.06,...
+## $ crude.homicide.White    &lt;dbl&gt; 3.43, NA, 0.87, 4.35, 4.27, 1.13, 3.46, 0.8...
+## $ adjusted.homicide.Black &lt;dbl&gt; 12.30, NA, 3.51, 33.00, 33.39, 4.81, 20.40,...
+## $ adjusted.homicide.White &lt;dbl&gt; 3.24, NA, 0.85, 4.47, 4.39, 1.13, 3.63, 0.9...
+## $ Deaths.suicide.Black    &lt;dbl&gt; 23, 12, 148, 370, 118, 75, 101, 80, 492, 63...
+## $ Deaths.suicide.White    &lt;dbl&gt; 535, 196, 1222, 3195, 2154, 1027, 4146, 197...
+## $ crude.suicide.Black     &lt;dbl&gt; 14.97, NA, 2.75, 6.88, 5.93, 3.77, 7.43, 5....
+## $ crude.suicide.White     &lt;dbl&gt; 23.52, 8.62, 8.56, 22.39, 22.10, 10.54, 24....
+## $ adjusted.suicide.Black  &lt;dbl&gt; 12.77, NA, 2.84, 7.20, 6.25, 3.93, 7.51, 5....
+## $ adjusted.suicide.White  &lt;dbl&gt; 23.47, 8.21, 8.64, 20.97, 20.98, 10.89, 21....
+## $ type                    &lt;chr&gt; &quot;Firearm&quot;, &quot;Non-Firearm&quot;, &quot;Non-Firearm&quot;, &quot;F...
+## $ crude.RD.suicide        &lt;dbl&gt; -8.55, NA, -5.81, -15.51, -16.17, -6.77, -1...
+## $ adj.RD.suicide          &lt;dbl&gt; -10.70, NA, -5.80, -13.77, -14.73, -6.96, -...
+## $ crude.RD.homicide       &lt;dbl&gt; 11.54, NA, 2.53, 29.35, 29.23, 3.39, 18.60,...
+## $ adj.RD.homicide         &lt;dbl&gt; 9.06, NA, 2.66, 28.53, 29.00, 3.68, 16.77, ...
+## $ ST.order.RD.homicide    &lt;chr&gt; &quot;AK&quot;, &quot;AK&quot;, &quot;AL&quot;, &quot;AL&quot;, &quot;AR&quot;, &quot;AR&quot;, &quot;AZ&quot;, &quot;...
+## $ ST.order.RD.suicide     &lt;chr&gt; &quot;AK&quot;, &quot;AK&quot;, &quot;AL&quot;, &quot;AL&quot;, &quot;AR&quot;, &quot;AR&quot;, &quot;AZ&quot;, &quot;...
+## $ gun.house.prev          &lt;dbl&gt; 59.8, 59.8, 52.2, 52.2, 58.8, 58.8, 32.3, 3...
+## $ gun.house.prev.category &lt;chr&gt; &quot;45.0%-65.5%&quot;, &quot;45.0%-65.5%&quot;, &quot;45.0%-65.5%&quot;...
+## $ average.pop.white       &lt;dbl&gt; 252733.9, 252733.9, 1585291.0, 1585291.0, 1...
+## $ average.pop.black       &lt;dbl&gt; 17073.78, 17073.78, 597403.89, 597403.89, 2...
+## $ type.fac                &lt;chr&gt; &quot;Firearm-related&quot;, &quot;Firearm-unrelated&quot;, &quot;Fi...</code></pre>
+<pre class="r"><code>#To understand which variable to take
+summary(cdc_males)</code></pre>
+<pre><code>##       ST               State           Population.Black   Population.White  
+##  Length:104         Length:104         Min.   :   40468   Min.   : 1014256  
+##  Class :character   Class :character   1st Qu.:  307028   1st Qu.: 5693930  
+##  Mode  :character   Mode  :character   Median : 1473393   Median :13495970  
+##                                        Mean   : 3406297   Mean   :17423433  
+##                                        3rd Qu.: 5982098   3rd Qu.:22797734  
+##                                        Max.   :13548892   Max.   :69327194  
+##                                        NA&#39;s   :2          NA&#39;s   :2         
+##  Deaths.homicide.Black Deaths.homicide.White crude.homicide.Black
+##  Min.   :   11.0       Min.   :   10.00      Min.   : 1.70       
+##  1st Qu.:   77.5       1st Qu.:   54.25      1st Qu.: 3.47       
+##  Median :  247.0       Median :  140.00      Median :14.84       
+##  Mean   : 1434.0       Mean   :  482.95      Mean   :17.79       
+##  3rd Qu.: 1339.0       3rd Qu.:  383.25      3rd Qu.:29.30       
+##  Max.   :53848.0       Max.   :18427.00      Max.   :62.71       
+##  NA&#39;s   :21            NA&#39;s   :2             NA&#39;s   :26          
+##  crude.homicide.White adjusted.homicide.Black adjusted.homicide.White
+##  Min.   :0.270        Min.   : 1.68           Min.   :0.2400         
+##  1st Qu.:0.700        1st Qu.: 3.48           1st Qu.:0.6725         
+##  Median :1.010        Median :12.89           Median :0.9900         
+##  Mean   :1.472        Mean   :16.83           Mean   :1.5024         
+##  3rd Qu.:1.895        3rd Qu.:27.84           3rd Qu.:1.9800         
+##  Max.   :4.740        Max.   :59.42           Max.   :4.7900         
+##  NA&#39;s   :10           NA&#39;s   :26              NA&#39;s   :10             
+##  Deaths.suicide.Black Deaths.suicide.White crude.suicide.Black
+##  Min.   :  11.0       Min.   :    23.0     Min.   : 1.620     
+##  1st Qu.:  57.0       1st Qu.:   719.8     1st Qu.: 4.235     
+##  Median : 120.0       Median :  1727.0     Median : 5.240     
+##  Mean   : 387.5       Mean   :  4525.9     Mean   : 5.351     
+##  3rd Qu.: 323.0       3rd Qu.:  3367.2     3rd Qu.: 6.330     
+##  Max.   :8928.0       Max.   :138607.0     Max.   :14.970     
+##  NA&#39;s   :19                                NA&#39;s   :26         
+##  crude.suicide.White adjusted.suicide.Black adjusted.suicide.White
+##  Min.   : 2.27       Min.   : 1.790         Min.   : 2.350        
+##  1st Qu.:10.06       1st Qu.: 4.332         1st Qu.: 9.717        
+##  Median :12.18       Median : 5.410         Median :11.770        
+##  Mean   :13.83       Mean   : 5.435         Mean   :13.169        
+##  3rd Qu.:17.11       3rd Qu.: 6.407         3rd Qu.:16.157        
+##  Max.   :29.59       Max.   :12.770         Max.   :28.560        
+##                      NA&#39;s   :26                                   
+##      type           crude.RD.suicide  adj.RD.suicide    crude.RD.homicide
+##  Length:104         Min.   :-19.320   Min.   :-15.650   Min.   : 1.110   
+##  Class :character   1st Qu.:-10.908   1st Qu.: -9.838   1st Qu.: 2.725   
+##  Mode  :character   Median : -6.850   Median : -6.500   Median :12.465   
+##                     Mean   : -8.374   Mean   : -7.548   Mean   :15.858   
+##                     3rd Qu.: -5.447   3rd Qu.: -5.263   3rd Qu.:26.297   
+##                     Max.   :  1.780   Max.   :  1.830   Max.   :60.040   
+##                     NA&#39;s   :26        NA&#39;s   :26        NA&#39;s   :28       
+##  adj.RD.homicide  ST.order.RD.homicide ST.order.RD.suicide gun.house.prev 
+##  Min.   : 1.270   Length:104           Length:104          Min.   :10.20  
+##  1st Qu.: 2.772   Class :character     Class :character    1st Qu.:32.30  
+##  Median :11.100   Mode  :character     Mode  :character    Median :40.30  
+##  Mean   :14.865                                            Mean   :38.97  
+##  3rd Qu.:23.797                                            3rd Qu.:46.50  
+##  Max.   :56.650                                            Max.   :65.50  
+##  NA&#39;s   :28                                                NA&#39;s   :4      
+##  gun.house.prev.category average.pop.white average.pop.black   type.fac        
+##  Length:104              Min.   : 112695   Min.   :   4496   Length:104        
+##  Class :character        1st Qu.: 632659   1st Qu.:  34114   Class :character  
+##  Mode  :character        Median :1499552   Median : 163710   Mode  :character  
+##                          Mean   :1935937   Mean   : 378477                     
+##                          3rd Qu.:2533082   3rd Qu.: 664678                     
+##                          Max.   :7703022   Max.   :1505432                     
+##                          NA&#39;s   :2         NA&#39;s   :2</code></pre>
+<pre class="r"><code>#leave_only_armed_data
+cdc_males_armed &lt;- cdc_males %&gt;% filter(type==&#39;Firearm&#39;,ST!=&#39;US&#39;)
+#remove_na
+cdc_males_without_na &lt;- cdc_males_armed[complete.cases(cdc_males_armed[,8]), ]
+#point plot by state, the total white population is divided by 9 so as to get the average annualized population size
+ggplot(cdc_males_without_na, aes(x =adjusted.suicide.White, y =adjusted.homicide.White, colour= gun.house.prev, size = Population.White/9)) +
+  geom_point()+ 
+  geom_text_repel(aes(label = ST),size=4,color=&#39;black&#39;) + 
+  xlab(&quot;White suicide rate (per 100,000 per year)&quot;) + 
+  ylab(&quot;White homicide rate (per 100,000 per year)&quot;)+
+  labs(colour = &quot;Gun ownership&quot;,size=&quot;White Population&quot;)+
+  scale_size(breaks = c(200000, 500000, 1500000, 3000000, 7000000), 
+                labels = c(&#39;200k&#39;, &#39;500k&#39;, &#39;1.5M&#39;, &#39;3M&#39;,&#39;7M&#39;))+
+  scale_colour_gradient(low=&quot;antiquewhite1&quot;,high=&quot;red&quot;,guide=&#39;legend&#39;,breaks=c(15, 27.5, 40, 55),
+                labels = c(&#39;10.2% to 19.9%&#39;,&#39;20.0% to 34.9%&#39;,&#39;35.0% to 44.9%&#39;, &#39;45.0% to 65.5%&#39;))+
+  annotate(&quot;text&quot;, label = &quot;Spearman&#39;s rho: 0.74&quot;, x = 23, y = 0.5, size = 4, colour = &quot;Black&quot;)</code></pre>
+<p><img src="/blogs/blog7_files/figure-html/gdp2_rep-1.png" width="672" /></p>
 </div>

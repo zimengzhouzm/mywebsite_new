@@ -1,0 +1,18 @@
+---
+categories:
+- ""
+- ""
+date: "2017-10-31T22:26:13-05:00"
+description: Nullam et orci eu lorem consequat tincidunt vivamus et sagittis magna sed nunc rhoncus condimentum sem. In efficitur ligula tate urna. Maecenas massa sed magna lacinia magna pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis tempus.
+draft: false
+image: Intro.jpg
+keywords: ""
+slug: Intro
+title: About me
+---
+
+Hi I am Zimeng! For non-Chinese speakers, you can just call me Michelle. Thank you for visiting my website. I will give you s short introduction about me:)
+
+Born and raised in **Chongqing China**, I moved to Hong Kong for undergraduate study in *Accounting and Finance*, during which I had the chance to go to the University of Cambridge for a summer school program to study economics and literature and developed a genuine respect for the vibrancy and dynamics of the city of London. This brought me to my current school at **London Business School**, where I am reading for Masters in Financial Analysis.
+
+I like to do data analysis and try to find the explanations behind the data. I am very glad and proud to present in this website the projects that I have been working on in 1o weeks of journey of learning **R**.

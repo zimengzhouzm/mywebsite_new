@@ -17,6 +17,16 @@
     </item>
     
     <item>
+      <title>About me</title>
+      <link>/blogs/intro/</link>
+      <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
+      
+      <guid>/blogs/intro/</guid>
+      <description>Hi I am Zimeng! For non-Chinese speakers, you can just call me Michelle. Thank you for visiting my website. I will give you s short introduction about me:)
+Born and raised in Chongqing China, I moved to Hong Kong for undergraduate study in Accounting and Finance, during which I had the chance to go to the University of Cambridge for a summer school program to study economics and literature and developed a genuine respect for the vibrancy and dynamics of the city of London.</description>
+    </item>
+    
+    <item>
       <title>Estimating Net Approval (approve-disapprove) for Donald Trump</title>
       <link>/blogs/trump/</link>
       <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
@@ -32,8 +42,16 @@
       <pubDate>Tue, 31 Oct 2017 22:26:13 -0500</pubDate>
       
       <guid>/blogs/tempus/</guid>
-      <description>library(tidyverse) # Load ggplot2, dplyr, and all the other tidyverse packageslibrary(mosaic)library(ggthemes)library(lubridate)library(here)library(skimr)library(janitor)library(httr)library(readxl)library(vroom)Trump&amp;rsquo;s Approval Margins As we saw in class, fivethirtyeight.com has detailed data on all polls that track the president&amp;rsquo;s approval 
-# Import approval polls dataapproval_polllist &amp;lt;- read_csv(here::here(&#39;data&#39;, &#39;approval_polllist.csv&#39;))# or directly off fivethirtyeight website# approval_polllist &amp;lt;- read_csv(&#39;https://projects.fivethirtyeight.com/trump-approval-data/approval_polllist.csv&#39;) glimpse(approval_polllist)approval_polllist&amp;lt;-approval_polllist %&amp;gt;% mutate(end_date1 = mdy(enddate))# Use `lubridate` to fix dates, as they are given as characters.</description>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Compare the GDP Components in the US, Germany and India</title>
+      <link>/blogs/gdp/</link>
+      <pubDate>Tue, 31 Oct 2017 22:26:09 -0500</pubDate>
+      
+      <guid>/blogs/gdp/</guid>
+      <description>GDP components over time and among countriesIn this project, I will use the data from the United Nations’ National Accounts Main Aggregates Database, which contains estimates of total GDP and its components for all countries from 1970 to today. I will look at how GDP and its components have changed over time, and compare different countries and how much each component contributes to that country’s GDP. The file I will work with is GDP and its breakdown at constant 2010 prices in US Dollars.</description>
     </item>
     
     <item>
@@ -43,6 +61,15 @@
       
       <guid>/blogs/magna/</guid>
       <description></description>
+    </item>
+    
+    <item>
+      <title>Relationship between the annual rates of firearm homicide and suicide among white men</title>
+      <link>/blogs/gun/</link>
+      <pubDate>Tue, 31 Oct 2017 22:26:09 -0500</pubDate>
+      
+      <guid>/blogs/gun/</guid>
+      <description>Firearm homicide and suicide were strongly associated for white men#upload datacdc_males &amp;lt;- read_csv(here::here(&amp;quot;data&amp;quot;, &amp;quot;CDC_Males.csv&amp;quot;))glimpse(cdc_males)## Rows: 104## Columns: 28## $ ST &amp;lt;chr&amp;gt; &amp;quot;AK&amp;quot;, &amp;quot;AK&amp;quot;, &amp;quot;AL&amp;quot;, &amp;quot;AL&amp;quot;, &amp;quot;AR&amp;quot;, &amp;quot;AR&amp;quot;, &amp;quot;AZ&amp;quot;, &amp;quot;...## $ State &amp;lt;chr&amp;gt; &amp;quot;Alaska&amp;quot;, &amp;quot;Alaska&amp;quot;, &amp;quot;Alabama&amp;quot;, &amp;quot;Alabama&amp;quot;, &amp;quot;...## $ Population.Black &amp;lt;dbl&amp;gt; 153664, 153664, 5376635, 5376635, 1991165, ...## $ Population.White &amp;lt;dbl&amp;gt; 2274605, 2274605, 14267619, 14267619, 97470...## $ Deaths.homicide.Black &amp;lt;dbl&amp;gt; 23, NA, 183, 1812, 667, 90, 300, 40, 3712, .</description>
     </item>
     
     <item>
