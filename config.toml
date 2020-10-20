@@ -44,20 +44,20 @@ disqusShortname = ""
     # logo = "logo.png"
 
     [[params.navigation.links]]
-      name = "Home"
-      url = "#"
+      name = "About me"
+      url = "blogs/Intro"
 
     [[params.navigation.links]]
-      name = "Blogs"
-      url = "blogs"
+      name = "2020 US Election"
+      url = "blogs/Trump"
 
- #   [[params.navigation.links]]
- #     name = "Generic Blog"
- #    url = "blogs/ipsum"
+   [[params.navigation.links]]
+      name = "GDP Components"
+     url = "blogs/GDP"
 
- #   [[params.navigation.links]]
- #     name = "Elements"
- #     url = "elements.html"
+    [[params.navigation.links]]
+      name = "Firearm homicide"
+      url = "blogs/Gun"
 
     # Add custom links here by uncommenting code below. To remove links just delete
     # the [[params.navigation.links]] map associated with that link. Copy and paste
@@ -144,8 +144,8 @@ disqusShortname = ""
   #  Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. 
   #  Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero.
   #  Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus."""
-    buttonText = "Return to the top"
-    url = "blogs"
+  #  buttonText = "Return to the top"
+  #  url = "blogs"
 
 
   # Contact section
